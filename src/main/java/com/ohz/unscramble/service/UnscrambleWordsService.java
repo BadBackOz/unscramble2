@@ -16,28 +16,33 @@ public class UnscrambleWordsService {
 
     Set<String> words = getListOfWords7CharactersOrLess();
 
-    public UnscrambledWordsResponse unscrambleWords(String request){
+    public UnscrambledWordsResponse unscrambleWords(String request) {
         UnscrambledWordsResponse response = initializeResponse();
 
-        if(StringUtils.hasLength(request)){
-            for(String word : words){
-                if(isWordFromCharacters(word, request)){
-                    switch (word.length()){
-                        case 1: response.getOneLetterWords().add(word);
-                                break;
-                        case 2: response.getTwoLetterWOrds().add(word);
-                            break;
-                        case 3: response.getThreeLetterWords().add(word);
-                            break;
-                        case 4: response.getFourLetterWords().add(word);
-                            break;
-                        case 5: response.getFiveLetterWords().add(word);
-                            break;
-                        case 6: response.getSixLetterWords().add(word);
-                            break;
-                        case 7: response.getSevenLetterWords().add(word);
-                            break;
-                    }
+        for (String word : words) {
+            if (isWordFromCharacters(word, request)) {
+                switch (word.length()) {
+                    case 1:
+                        response.getOneLetterWords().add(word);
+                        break;
+                    case 2:
+                        response.getTwoLetterWOrds().add(word);
+                        break;
+                    case 3:
+                        response.getThreeLetterWords().add(word);
+                        break;
+                    case 4:
+                        response.getFourLetterWords().add(word);
+                        break;
+                    case 5:
+                        response.getFiveLetterWords().add(word);
+                        break;
+                    case 6:
+                        response.getSixLetterWords().add(word);
+                        break;
+                    case 7:
+                        response.getSevenLetterWords().add(word);
+                        break;
                 }
             }
         }
@@ -47,12 +52,12 @@ public class UnscrambleWordsService {
         return response;
     }
 
-    private int getCountOfWordsUnscrambled(UnscrambledWordsResponse res){
+    private int getCountOfWordsUnscrambled(UnscrambledWordsResponse res) {
         return res.getOneLetterWords().size() + res.getTwoLetterWOrds().size() + res.getThreeLetterWords().size() +
                 res.getFourLetterWords().size() + res.getFiveLetterWords().size() + res.getSixLetterWords().size() + res.getSevenLetterWords().size();
     }
 
-    private UnscrambledWordsResponse initializeResponse(){
+    private UnscrambledWordsResponse initializeResponse() {
         UnscrambledWordsResponse response = new UnscrambledWordsResponse();
         response.setOneLetterWords(new ArrayList<>());
         response.setTwoLetterWOrds(new ArrayList<>());
@@ -65,31 +70,31 @@ public class UnscrambleWordsService {
         return response;
     }
 
-    private static Set<String> getListOfWords(){
+    private static Set<String> getListOfWords() {
         Set<String> listOfWords = new HashSet<>();
         try {
             File file = new File(".src/main/resources/files/words.txt");
             Scanner scanner = new Scanner(file);
-            while(scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) {
                 listOfWords.add(scanner.nextLine());
             }
             scanner.close();
-        }catch(IOException e) {
+        } catch (IOException e) {
             System.out.println(e.getCause().getMessage());
         }
         return listOfWords;
     }
 
-    private static Set<String> getListOfWords7CharactersOrLess(){
+    private static Set<String> getListOfWords7CharactersOrLess() {
         Set<String> listOfWords = new HashSet<>();
         try {
             File file = new File("src/main/resources/files/words.txt");
             Scanner scanner = new Scanner(file);
-            while(scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) {
                 listOfWords.add(scanner.nextLine());
             }
             scanner.close();
-        }catch(IOException e) {
+        } catch (IOException e) {
             System.out.println(e.getCause().getMessage());
         }
 
@@ -97,13 +102,13 @@ public class UnscrambleWordsService {
         return listOfWords;
     }
 
-    private boolean isWordFromCharacters(String word, String scrambledCharacters){
+    private boolean isWordFromCharacters(String word, String scrambledCharacters) {
         boolean isWord = false;
         String wordToValidate = word;
-        for(char character : scrambledCharacters.toCharArray()){
+        for (char character : scrambledCharacters.toCharArray()) {
             wordToValidate = wordToValidate.replaceFirst(String.valueOf(character), "");
 
-            if(wordToValidate.isEmpty()){
+            if (wordToValidate.isEmpty()) {
                 isWord = true;
                 break;
             }
