@@ -14,13 +14,17 @@ import java.util.Set;
 @Service
 public class UnscrambleWordsService {
 
-    Set<String> words = getListOfWords7CharactersOrLess();
+    Set<String> words = getListOfWords();
 
     public UnscrambledWordsResponse unscrambleWords(String request) {
         UnscrambledWordsResponse response = initializeResponse();
+        int totalWordsUnscrambled = 0;
 
-        for (String word : words) {
-            if (isWordFromCharacters(word, request)) {
+        Set<String> wordList = getWordsWithUpToCharacters(words, request.length());
+        for (String word : wordList) {
+            if (isWordFromCharacters(word.toLowerCase(), request.toLowerCase())) {
+                word = StringUtils.capitalize(word);
+                totalWordsUnscrambled = totalWordsUnscrambled + 1;
                 switch (word.length()) {
                     case 1:
                         response.getOneLetterWords().add(word);
@@ -43,18 +47,37 @@ public class UnscrambleWordsService {
                     case 7:
                         response.getSevenLetterWords().add(word);
                         break;
+                    case 8:
+                        response.getEightLetterWords().add(word);
+                        break;
+                    case 9:
+                        response.getNineLetterWords().add(word);
+                        break;
+                    case 10:
+                        response.getTenLetterWords().add(word);
+                        break;
+                    case 11:
+                        response.getElevenLetterWords().add(word);
+                        break;
+                    case 12:
+                        response.getTwelveLetterWords().add(word);
+                        break;
+                    case 13:
+                        response.getThirteenLetterWords().add(word);
+                        break;
+                    case 14:
+                        response.getFourteenLetterWords().add(word);
+                        break;
+                    case 15:
+                        response.getFifteenLetterWords().add(word);
+                        break;
                 }
             }
         }
 
-        response.setMessage(String.format("Total words unscrambled from '%s': %s", request, getCountOfWordsUnscrambled(response)));
+        response.setMessage(String.format("Total words unscrambled from '%s': %s", request, totalWordsUnscrambled));
 
         return response;
-    }
-
-    private int getCountOfWordsUnscrambled(UnscrambledWordsResponse res) {
-        return res.getOneLetterWords().size() + res.getTwoLetterWOrds().size() + res.getThreeLetterWords().size() +
-                res.getFourLetterWords().size() + res.getFiveLetterWords().size() + res.getSixLetterWords().size() + res.getSevenLetterWords().size();
     }
 
     private UnscrambledWordsResponse initializeResponse() {
@@ -102,9 +125,17 @@ public class UnscrambleWordsService {
         return listOfWords;
     }
 
+    private static Set<String> getWordsWithUpToCharacters(Set<String> completeWordLIst, int maxCharacters){
+        completeWordLIst.removeIf(word -> word.length() > maxCharacters);
+        return completeWordLIst;
+    }
+
     private boolean isWordFromCharacters(String word, String scrambledCharacters) {
         boolean isWord = false;
         String wordToValidate = word;
+        int blankLettersCount = StringUtils.countOccurrencesOf(scrambledCharacters, "*");
+
+        scrambledCharacters = scrambledCharacters.replaceAll("\\*","");
         for (char character : scrambledCharacters.toCharArray()) {
             wordToValidate = wordToValidate.replaceFirst(String.valueOf(character), "");
 
@@ -112,6 +143,10 @@ public class UnscrambleWordsService {
                 isWord = true;
                 break;
             }
+        }
+
+        if(wordToValidate.length() <= blankLettersCount){
+            isWord = true;
         }
 
         return isWord;
