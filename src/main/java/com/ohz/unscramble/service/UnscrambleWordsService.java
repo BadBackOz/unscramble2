@@ -89,6 +89,14 @@ public class UnscrambleWordsService {
         response.setFiveLetterWords(new ArrayList<>());
         response.setSixLetterWords(new ArrayList<>());
         response.setSevenLetterWords(new ArrayList<>());
+        response.setEightLetterWords(new ArrayList<>());
+        response.setNineLetterWords(new ArrayList<>());
+        response.setTenLetterWords(new ArrayList<>());
+        response.setElevenLetterWords(new ArrayList<>());
+        response.setTwelveLetterWords(new ArrayList<>());
+        response.setThirteenLetterWords(new ArrayList<>());
+        response.setFourteenLetterWords(new ArrayList<>());
+        response.setFifteenLetterWords(new ArrayList<>());
 
         return response;
     }
@@ -96,7 +104,7 @@ public class UnscrambleWordsService {
     private static Set<String> getListOfWords() {
         Set<String> listOfWords = new HashSet<>();
         try {
-            File file = new File(".src/main/resources/files/words.txt");
+            File file = new File("src/main/resources/files/words.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 listOfWords.add(scanner.nextLine());
@@ -125,9 +133,10 @@ public class UnscrambleWordsService {
         return listOfWords;
     }
 
-    private static Set<String> getWordsWithUpToCharacters(Set<String> completeWordLIst, int maxCharacters){
-        completeWordLIst.removeIf(word -> word.length() > maxCharacters);
-        return completeWordLIst;
+    private static Set<String> getWordsWithUpToCharacters(Set<String> completeWordList, int maxCharacters){
+        Set<String> wordList = completeWordList;
+        wordList.removeIf(word -> word.length() > maxCharacters);
+        return wordList;
     }
 
     private boolean isWordFromCharacters(String word, String scrambledCharacters) {
