@@ -134,9 +134,8 @@ public class UnscrambleWordsService {
     }
 
     private static Set<String> getWordsWithUpToCharacters(Set<String> completeWordList, int maxCharacters){
-        Set<String> wordList = completeWordList;
-        wordList.removeIf(word -> word.length() > maxCharacters);
-        return wordList;
+        completeWordList.removeIf(word -> word.length() > maxCharacters);
+        return completeWordList;
     }
 
     private boolean isWordFromCharacters(String word, String scrambledCharacters) {
