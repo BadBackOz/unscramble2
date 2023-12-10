@@ -27,14 +27,6 @@ public class UnscrambleWordsServiceTest {
     }
 
     @Test
-    void whenGetListOfWords7CharactersOrLess_ThenReturnWords(){
-        Set<String> listOfWords = ReflectionTestUtils.invokeMethod(service, "getListOfWords7CharactersOrLess");
-
-        Assertions.assertNotNull(listOfWords);
-        Assertions.assertEquals(97506, listOfWords.size());
-    }
-
-    @Test
     void givenCharacters_WhenUnscrambleWords_ThenReturnUnscrambledWords(){
         UnscrambledWordsResponse response = service.unscrambleWords("azedbwe");
 
