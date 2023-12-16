@@ -11,7 +11,10 @@ import java.util.*;
 @Service
 public class UnscrambleWordsService {
 
+    private static final String WORD_LIST_FILE_RELATIVE_PATH = "src/main/resources/files/words.txt";
+
     Map<String, List<String>> wordListMap = getMapOfWordsBasedOnCharacterCount();
+
 
     public UnscrambledWordsResponse unscrambleWords(String request) {
         UnscrambledWordsResponse response = new UnscrambledWordsResponse();
@@ -31,7 +34,7 @@ public class UnscrambleWordsService {
                             response.getOneLetterWords().add(word);
                             break;
                         case 2:
-                            response.getTwoLetterWOrds().add(word);
+                            response.getTwoLetterWords().add(word);
                             break;
                         case 3:
                             response.getThreeLetterWords().add(word);
@@ -87,14 +90,14 @@ public class UnscrambleWordsService {
     private static Set<String> getListOfWords() {
         Set<String> listOfWords = new HashSet<>();
         try {
-            File file = new File("src/main/resources/files/words.txt");
+            File file = new File(WORD_LIST_FILE_RELATIVE_PATH);
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 listOfWords.add(scanner.nextLine());
             }
             scanner.close();
         } catch (IOException e) {
-            System.out.println(e.getCause().getMessage());
+            System.out.printf("ERROR: WORD LIST NOT LOADED. Exception: %s%n", e);
         }
         return listOfWords;
     }

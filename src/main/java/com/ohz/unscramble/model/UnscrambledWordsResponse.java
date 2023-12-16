@@ -1,17 +1,18 @@
 package com.ohz.unscramble.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UnscrambledWordsResponse {
     String message;
     List<String> oneLetterWords = new ArrayList<>();
-    List<String> twoLetterWOrds = new ArrayList<>();
+    List<String> twoLetterWords = new ArrayList<>();
     List<String> threeLetterWords = new ArrayList<>();
     List<String> fourLetterWords = new ArrayList<>();
     List<String> fiveLetterWords = new ArrayList<>();

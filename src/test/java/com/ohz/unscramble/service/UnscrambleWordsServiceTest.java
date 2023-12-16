@@ -8,11 +8,12 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-public class UnscrambleWordsServiceTest {
+class UnscrambleWordsServiceTest {
 
     @InjectMocks
     UnscrambleWordsService service;
@@ -41,7 +42,7 @@ public class UnscrambleWordsServiceTest {
         UnscrambledWordsResponse response = service.unscrambleWords("abcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyz");
 
         Assertions.assertTrue(response.getOneLetterWords().contains("A"));
-        Assertions.assertTrue(response.getTwoLetterWOrds().contains("Ab"));
+        Assertions.assertTrue(response.getTwoLetterWords().contains("Ab"));
         Assertions.assertTrue(response.getThreeLetterWords().contains("Low"));
         Assertions.assertTrue(response.getFourLetterWords().contains("Gets"));
         Assertions.assertTrue(response.getFiveLetterWords().contains("Rails"));
@@ -61,6 +62,7 @@ public class UnscrambleWordsServiceTest {
     void givenWordList_WhenGetMapOfWordsBasedOnCharacterCount_ThenReturnWordList(){
         Map<String, List<String>> wordMap = ReflectionTestUtils.invokeMethod(service, "getMapOfWordsBasedOnCharacterCount");
 
+        assert wordMap != null;
         List<String> oneCharacterWordList = wordMap.get("1");
 
         Assertions.assertTrue(oneCharacterWordList.contains("a"));
