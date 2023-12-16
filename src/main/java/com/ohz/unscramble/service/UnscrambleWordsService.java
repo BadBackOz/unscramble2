@@ -72,6 +72,8 @@ public class UnscrambleWordsService {
                         case 15:
                             response.getFifteenLetterWords().add(word);
                             break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -95,11 +97,6 @@ public class UnscrambleWordsService {
             System.out.println(e.getCause().getMessage());
         }
         return listOfWords;
-    }
-
-    private static Set<String> getWordsWithUpToCharacters(Set<String> completeWordList, int maxCharacters){
-        completeWordList.removeIf(word -> word.length() > maxCharacters);
-        return completeWordList;
     }
 
     private static Map<String, List<String>> getMapOfWordsBasedOnCharacterCount(){
@@ -155,6 +152,8 @@ public class UnscrambleWordsService {
                 case 15:
                     mapOfWords.computeIfAbsent("15", k -> new ArrayList<>()).add(word);
                     break;
+                default:
+                    break;
             }
         }
         return mapOfWords;
@@ -165,7 +164,7 @@ public class UnscrambleWordsService {
         String wordToValidate = word;
         int blankLettersCount = StringUtils.countOccurrencesOf(scrambledCharacters, "*");
 
-        scrambledCharacters = scrambledCharacters.replaceAll("\\*","");
+        scrambledCharacters = scrambledCharacters.replace("*","");
         for (char character : scrambledCharacters.toCharArray()) {
             wordToValidate = wordToValidate.replaceFirst(String.valueOf(character), "");
 

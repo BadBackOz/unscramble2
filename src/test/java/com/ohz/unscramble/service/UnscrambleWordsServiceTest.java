@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class UnscrambleWordsServiceTest {
@@ -31,6 +34,37 @@ public class UnscrambleWordsServiceTest {
         UnscrambledWordsResponse response = service.unscrambleWords("azedbwe");
 
         Assertions.assertNotNull(response);
+    }
+
+    @Test
+    void givenAllCharacters_WhenUnscrambleWords_ThenReturnUnscrambledWords(){
+        UnscrambledWordsResponse response = service.unscrambleWords("abcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyz");
+
+        Assertions.assertTrue(response.getOneLetterWords().contains("A"));
+        Assertions.assertTrue(response.getTwoLetterWOrds().contains("Ab"));
+        Assertions.assertTrue(response.getThreeLetterWords().contains("Low"));
+        Assertions.assertTrue(response.getFourLetterWords().contains("Gets"));
+        Assertions.assertTrue(response.getFiveLetterWords().contains("Rails"));
+        Assertions.assertTrue(response.getSixLetterWords().contains("Groins"));
+        Assertions.assertTrue(response.getSevenLetterWords().contains("Dryness"));
+        Assertions.assertTrue(response.getEightLetterWords().contains("Blunders"));
+        Assertions.assertTrue(response.getNineLetterWords().contains("Turquoise"));
+        Assertions.assertTrue(response.getTenLetterWords().contains("Solidarity"));
+        Assertions.assertTrue(response.getElevenLetterWords().contains("Enfranchise"));
+        Assertions.assertTrue(response.getTwelveLetterWords().contains("Effortlessly"));
+        Assertions.assertTrue(response.getThirteenLetterWords().contains("Transcribable"));
+        Assertions.assertTrue(response.getFourteenLetterWords().contains("Unbreakability"));
+        Assertions.assertTrue(response.getFifteenLetterWords().contains("Decompensations"));
+    }
+
+    @Test
+    void givenWordList_WhenGetMapOfWordsBasedOnCharacterCount_ThenReturnWordList(){
+        Map<String, List<String>> wordMap = ReflectionTestUtils.invokeMethod(service, "getMapOfWordsBasedOnCharacterCount");
+
+        List<String> oneCharacterWordList = wordMap.get("1");
+
+        Assertions.assertTrue(oneCharacterWordList.contains("a"));
+        Assertions.assertEquals(26, oneCharacterWordList.size());
     }
 
 }
