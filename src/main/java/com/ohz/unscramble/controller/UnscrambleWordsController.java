@@ -1,25 +1,34 @@
 package com.ohz.unscramble.controller;
 
+import com.ohz.unscramble.exception.UnscrambleException;
 import com.ohz.unscramble.model.UnscrambledWordsResponse;
 import com.ohz.unscramble.service.UnscrambleWordsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ohz.unscramble.requestvalidator.GetWordsRequestValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Controller
+@RestControllerAdvice
 public class UnscrambleWordsController {
 
-    @Autowired
+    private UnscrambleWordsController() {
+        this.service = new UnscrambleWordsService();
+        this.getWordsRequestValidator = new GetWordsRequestValidator();
+    }
+
     UnscrambleWordsService service;
 
-    @PostMapping(path = "/getWords")
-    public ResponseEntity<UnscrambledWordsResponse> getWords (@RequestBody String request){
-        UnscrambledWordsResponse response;
+    GetWordsRequestValidator getWordsRequestValidator;
 
-        response = service.unscrambleWords(request);
+    @GetMapping(path = "/getWords/{scrambledCharacters}")
+    public ResponseEntity<Object> getWords(@PathVariable(value = "scrambledCharacters") String scrambledCharacters) throws UnscrambleException {
+        UnscrambledWordsResponse response;
+        getWordsRequestValidator.validateUnscrambleWordsRequest(scrambledCharacters);
+        response = service.unscrambleWords(scrambledCharacters);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
