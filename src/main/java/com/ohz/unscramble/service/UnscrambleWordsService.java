@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class UnscrambleWordsService {
@@ -19,12 +20,12 @@ public class UnscrambleWordsService {
 
     private UnscrambledWordsResponse unscrambledWordsResponse;
 
-    private int totalCountOfWordsUnscrambled;
+    private final AtomicInteger totalCountOfWordsUnscrambled = new AtomicInteger(0);
 
 
     public UnscrambledWordsResponse unscrambleWords(String request) {
         unscrambledWordsResponse = new UnscrambledWordsResponse();
-        totalCountOfWordsUnscrambled = 0;
+        totalCountOfWordsUnscrambled.set(0);
         try (ExecutorService executorService = Executors.newCachedThreadPool()) {
             for (int i = 1; i < 16; i++) {
                 int finalI = i;
@@ -97,7 +98,7 @@ public class UnscrambleWordsService {
                 }
             }
         }
-        setTotalCountOfWordsUnscrambled(wordsUnscrambled);
+        totalCountOfWordsUnscrambled.getAndAccumulate(wordsUnscrambled, Integer::sum);
     }
 
     private Set<String> getListOfWords() {
@@ -113,10 +114,6 @@ public class UnscrambleWordsService {
             System.out.printf("ERROR: WORD LIST NOT LOADED. Exception: %s%n", e);
         }
         return listOfWords;
-    }
-
-    private synchronized void setTotalCountOfWordsUnscrambled(int wordsUnscrambled){
-        totalCountOfWordsUnscrambled = totalCountOfWordsUnscrambled + wordsUnscrambled;
     }
 
     private Map<String, List<String>> getMapOfWordsBasedOnCharacterCount() {
